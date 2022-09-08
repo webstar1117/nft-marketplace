@@ -40,6 +40,9 @@ const App = () => {
       const nftDeployedNetwork = NFTCollection.networks[networkId];
       const nftContract = collectionCtx.loadContract(web3, NFTCollection, nftDeployedNetwork);
 
+      console.log('nftContract');
+      console.log(nftContract);
+
       const mktDeployedNetwork = NFTMarketplace.networks[networkId];
       const mktContract = marketplaceCtx.loadContract(web3, NFTMarketplace, mktDeployedNetwork);
 
