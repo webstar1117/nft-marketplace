@@ -4,9 +4,17 @@ import Web3Context from '../../../store/web3-context';
 import CollectionContext from '../../../store/collection-context';
 
 const ipfsClient = require('ipfs-http-client');
-const ipfs = ipfsClient.create({ host: 'infura-ipfs.io', port: 5001, protocol: 'https' });
+const auth = 'Basic ' + Buffer.from(process.env.INFURA_ID + ':' + process.env.INFURA_SECRET_KEY).toString('base64');
+const ipfs = ipfsClient.create({
+  host: 'infura-ipfs.io',
+  port: 5001,
+  protocol: 'https',
+  headers: {
+    authorization: auth,
+  }
+});
 
-const MintForm = () => {  
+const MintForm = () => {
   const [enteredName, setEnteredName] = useState('');
   const [descriptionIsValid, setDescriptionIsValid] = useState(true);
 
@@ -26,7 +34,7 @@ const MintForm = () => {
   const enteredDescriptionHandler = (event) => {
     setEnteredDescription(event.target.value);
   };
-  
+
   const captureFile = (event) => {
     event.preventDefault();
 
@@ -35,10 +43,10 @@ const MintForm = () => {
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
-      setCapturedFileBuffer(Buffer(reader.result));     
+      setCapturedFileBuffer(Buffer(reader.result));
     }
-  };  
-  
+  };
+
   const submissionHandler = (event) => {
     event.preventDefault();
 
@@ -49,10 +57,10 @@ const MintForm = () => {
     const formIsValid = enteredName && enteredDescription && capturedFileBuffer;
 
     // Upload file to IPFS and push to the blockchain
-    const mintNFT = async() => {
+    const mintNFT = async () => {
       // Add file to the IPFS
       const fileAdded = await ipfs.add(capturedFileBuffer);
-      if(!fileAdded) {
+      if (!fileAdded) {
         console.error('Something went wrong when updloading the file');
         return;
       }
@@ -77,29 +85,29 @@ const MintForm = () => {
       };
 
       const metadataAdded = await ipfs.add(JSON.stringify(metadata));
-      if(!metadataAdded) {
+      if (!metadataAdded) {
         console.error('Something went wrong when updloading the file');
         return;
       }
-      
+
       collectionCtx.contract.methods.safeMint(metadataAdded.path).send({ from: web3Ctx.account })
-      .on('transactionHash', (hash) => {
-        collectionCtx.setNftIsLoading(true);
-      })
-      .on('error', (e) =>{
-        window.alert('Something went wrong when pushing to the blockchain');
-        collectionCtx.setNftIsLoading(false);  
-      })      
+        .on('transactionHash', (hash) => {
+          collectionCtx.setNftIsLoading(true);
+        })
+        .on('error', (e) => {
+          window.alert('Something went wrong when pushing to the blockchain');
+          collectionCtx.setNftIsLoading(false);
+        })
     };
 
     formIsValid && mintNFT();
   };
 
-  const nameClass = nameIsValid? "form-control" : "form-control is-invalid";
-  const descriptionClass = descriptionIsValid? "form-control" : "form-control is-invalid";
-  const fileClass = fileIsValid? "form-control" : "form-control is-invalid";
-  
-  return(
+  const nameClass = nameIsValid ? "form-control" : "form-control is-invalid";
+  const descriptionClass = descriptionIsValid ? "form-control" : "form-control is-invalid";
+  const fileClass = fileIsValid ? "form-control" : "form-control is-invalid";
+
+  return (
     <form onSubmit={submissionHandler}>
       <div className="row justify-content-center">
         <div className="col-md-2">
