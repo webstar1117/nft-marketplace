@@ -3,8 +3,12 @@ import { useState, useContext } from 'react';
 import Web3Context from '../../../store/web3-context';
 import CollectionContext from '../../../store/collection-context';
 
+const INFURA_ID='2EgsxhzG2CJiyKI0DLxG1aPueXz';
+const INFURA_SECRET_KEY='86d369276a18b6851d445b5ebfeff201';
+
 const ipfsClient = require('ipfs-http-client');
-const auth = 'Basic ' + Buffer.from(process.env.INFURA_ID + ':' + process.env.INFURA_SECRET_KEY).toString('base64');
+
+const auth = 'Basic ' + Buffer.from(INFURA_ID + ':' + INFURA_SECRET_KEY).toString('base64');
 const ipfs = ipfsClient.create({
   host: 'infura-ipfs.io',
   port: 5001,
