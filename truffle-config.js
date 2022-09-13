@@ -8,19 +8,25 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 7545,
+      port: 8545,
       network_id: "*" //match any network id
     },
     rinkeby: {
+      networkCheckTimeout: 999999,
       provider: function() {
         return new HDWalletProvider(
-          privateKeys.split(','), // array of private keys
+          ['cb4e8f8caafe8aa47dbb17e772a2593faf43cd192c229c77b923fe57c2e80e55'], // array of private keys
           `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}` // Url to an Ethereum node
         )
       },
       gas: 5000000,
       gasPrice: 25000000000,
       network_id: 4
+    },
+    live: {
+      network_id: 1,
+      host: "127.0.0.1",
+      port: 8546   // Different than the default below
     }
   },
   contracts_directory: './src/contracts',

@@ -3,7 +3,7 @@ import { useReducer } from 'react';
 import MarketplaceContext from './marketplace-context';
 
 const defaultMarketplaceState = {
-  contract: 0xE9983Fd320bdaBc63C6a8d1B1D43C3952E99C8B0,
+  contract: null,
   offerCount: null,
   offers: [],
   userFunds: null,

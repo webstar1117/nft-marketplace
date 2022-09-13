@@ -23,26 +23,7 @@ const Navbar = () => {
     web3Ctx.loadAccount(web3);
   };
 
-  const claimFundsHandler = () => {
-    marketplaceCtx.contract.methods.claimFunds().send({ from: web3Ctx.account })
-    .on('transactionHash', (hash) => {
-      setFundsLoading(true);
-    })
-    .on('error', (error) => {
-      window.alert('Something went wrong when pushing to the blockchain');
-      setFundsLoading(false);
-    });
-  };
 
-  // Event ClaimFunds subscription 
-  marketplaceCtx.contract.events.ClaimFunds()
-  .on('data', (event) => {
-    marketplaceCtx.loadUserFunds(marketplaceCtx.contract, web3Ctx.account);
-    setFundsLoading(false);
-  })
-  .on('error', (error) => {
-    console.log(error);
-  });
 
   let etherscanUrl;
 
@@ -60,14 +41,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-sm navbar-light bg-white p-0">      
       <ul className="navbar-nav ms-auto">
         <li className="nav-item">
-          {marketplaceCtx.userFunds > 0 && !fundsLoading &&
-            <button 
-              type="button" 
-              className="btn btn-info btn-block navbar-btn text-white" 
-              onClick={claimFundsHandler}
-            >          
-              {`CLAIM ${formatPrice(marketplaceCtx.userFunds)} ETH`}
-            </button>}
+
           {fundsLoading &&
             <div class="d-flex justify-content-center text-info">
               <div class="spinner-border" role="status">

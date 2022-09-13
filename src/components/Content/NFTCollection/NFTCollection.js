@@ -10,6 +10,9 @@ import eth from '../../../img/eth.png';
 const NFTCollection = () => {
   const web3Ctx = useContext(Web3Context);
   const collectionCtx = useContext(CollectionContext);
+
+  console.log('collectionCtx')
+  console.log(collectionCtx)
   const marketplaceCtx = useContext(MarketplaceContext);
 
   const priceRefs = useRef([]);

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const CollectionContext = React.createContext({
-  contract: 0x0Cd2d33e31B1244F24B3640A47303EcC15ef4750,
+  contract: null,
   totalSupply: null,
   collection: [],
   nftIsLoading: true,
